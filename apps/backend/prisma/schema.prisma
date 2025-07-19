@@ -15,18 +15,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Referral relationships
-  referralCode    String?  @unique
-  referredBy      User?    @relation("UserReferrals", fields: [referredById], references: [id])
-  referredById    String?
-  referrals       User[]   @relation("UserReferrals")
-
-  @@map("users")
+  id             String   @id @default(uuid())
+  email          String   @unique
+  password       String?  // Null if OAuth
+  name           String
+  surname        String
+  nickname       String
+  dateOfBirth    DateTime
+  referralCode   String   @unique
+  referredBy     String?  // Optional: code used to sign up
+  role           String   @default("seller")
+  provider       String   @default("email") // 'email', 'google', 'facebook'
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
