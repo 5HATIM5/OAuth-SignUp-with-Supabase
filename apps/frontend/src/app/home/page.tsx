@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Container, Title, Text, Button, Paper, Group, Stack, Avatar } from '@mantine/core';
+import { Container, Title, Text, Button, Paper, Group, Stack, Avatar, LoadingOverlay } from '@mantine/core';
 import { sessionManager, User } from '../../../lib/auth/session';
 import { notifications } from '@mantine/notifications';
 
@@ -36,9 +36,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <Container size="md" py={50}>
-        <Text ta="center">Loading...</Text>
-      </Container>
+      <LoadingOverlay visible={loading} />
     );
   }
 
@@ -60,31 +58,6 @@ export default function HomePage() {
               Logout
             </Button>
           </Group>
-
-          <Paper withBorder p="md" radius="md" bg="gray.0">
-            <Stack gap="md">
-              <Group>
-                <Avatar size="lg" color="blue">
-                  {user.name.charAt(0)}{user.surname.charAt(0)}
-                </Avatar>
-                <div>
-                  <Title order={3}>{user.name} {user.surname}</Title>
-                  <Text c="dimmed">@{user.nickname}</Text>
-                  <Text size="sm" c="dimmed">{user.email}</Text>
-                </div>
-              </Group>
-
-              <Group>
-                <Text fw={600}>Role:</Text>
-                <Text>{user.role}</Text>
-              </Group>
-            </Stack>
-          </Paper>
-
-          <Paper withBorder p="md" radius="md" bg="gray.0">
-            <Title order={4} mb="md">Dashboard</Title>
-            <Text>This is your personalized dashboard. More features coming soon!</Text>
-          </Paper>
         </Stack>
       </Paper>
     </Container>
