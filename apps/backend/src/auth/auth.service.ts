@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto } from './auth.dto';
+import { parseDate } from 'src/lib/helpers/helperFunctions';
 
 @Injectable()
 export class AuthService {
@@ -19,27 +20,7 @@ export class AuthService {
     
     const referralCode = Math.random().toString(36).substring(2, 8);
 
-    const parseDate = (dateString: string) => {
-      if (dateString.includes('/')) {
-        const parts = dateString.split('/');
-        if (parts.length === 3) {
-          const day = parseInt(parts[0]);
-          const month = parseInt(parts[1]) - 1; 
-          const year = parseInt(parts[2]);
-          const date = new Date(year, month, day);
-          return date;
-        }
-      }
-      
-      if (dateString.includes('-')) {
-        const date = new Date(dateString);
-        return date;
-      }
-      
-      const date = new Date(dateString);
-      return date;
-    };
-
+  
     const user = await this.prisma.user.create({
       data: {
         email: dto.email,
@@ -71,6 +52,30 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
+  async oauthLogin({ email, name, nickname, provider }: any) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+  
+    if (user) {
+      return this.generateAuthResponse(user);
+    }
+  
+    const newUser = await this.prisma.user.create({
+      data: {
+        email,
+        name,
+        surname: '',
+        nickname,
+        dateOfBirth: new Date('2000-01-01'), // default
+        password: null,
+        referralCode: Math.random().toString(36).substring(2, 8),
+        role: 'seller',
+        provider,
+      },
+    });
+  
+    return this.generateAuthResponse(newUser);
+  }
+  
   private generateToken(userId: string, email: string) {
     const payload = { sub: userId, email };
     return {

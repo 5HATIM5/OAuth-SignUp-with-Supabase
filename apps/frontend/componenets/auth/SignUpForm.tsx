@@ -26,6 +26,7 @@ import { sessionManager } from '../../lib/auth/session';
 import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
 import { getValidationRules } from '../../lib/helpers/validation';
+import { supabase } from '../../lib/db/supabse';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
@@ -116,6 +117,15 @@ export default function SignUpForm(props: PaperProps) {
       }
   };
 
+  const loginWith = async (provider: 'google' | 'facebook') => {
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: 'http://localhost:3000/oauth',
+      },
+    });
+  };
+  
   return (
     <Box pos="relative">
       <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
@@ -149,8 +159,8 @@ export default function SignUpForm(props: PaperProps) {
           {type === 'login' && (
             <>
               <Group grow mb="md" mt="md">
-                <GoogleButton radius="xl">Google</GoogleButton>
-                <FacebookButton radius="xl">Facebook</FacebookButton>
+                <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
+                <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
               </Group>
               <Divider label="Or continue with email" labelPosition="center" my="md" />
             </>

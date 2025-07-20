@@ -1,7 +1,7 @@
 import { AuthResponse } from '../api/auth.api.ts.js';
 
-const TOKEN_KEY = 'auth_token';
-const USER_KEY = 'user_data';
+export const TOKEN_KEY = 'auth_token';
+export const USER_KEY = 'user_data';
 
 export interface User {
   id: string;

@@ -16,6 +16,11 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  @Post('oauth-login')
+  async oauthLogin(@Body() body: any) {
+    return this.authService.oauthLogin(body);
+  }
+
   @Get('test')
   test() {
     return 'hello';
