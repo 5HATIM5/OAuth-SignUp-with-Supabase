@@ -2,10 +2,29 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
 const theme = createTheme({
-  /** Put your mantine theme override here */
+  colors: {
+    // Custom white shades
+    white: [
+      '#ffffff',
+      '#fafafa',
+      '#f5f5f5',
+      '#f0f0f0',
+      '#e5e5e5',
+      '#d4d4d4',
+      '#a3a3a3',
+      '#737373',
+      '#525252',
+      '#404040',
+    ],
+  },
+  primaryColor: 'gray',
+  defaultRadius: 'md',
+  fontFamily: 'Inter, system-ui, sans-serif',
 });
 
 const geistSans = Geist({
@@ -34,8 +53,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
       <MantineProvider theme={theme}>
-          {children}
-        </MantineProvider>
+        <Notifications />
+        {children}
+      </MantineProvider>
       </body>
     </html>
   );
