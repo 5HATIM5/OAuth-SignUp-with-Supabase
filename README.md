@@ -1,1 +1,1 @@
-# trendies-referal-auth
+OAuth-SignUp-with-Supabase
