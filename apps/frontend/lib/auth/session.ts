@@ -1,4 +1,6 @@
+import { Router } from 'next/router.js';
 import { AuthResponse } from '../api/auth-api.js';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime.js';
 
 export const TOKEN_KEY = 'auth_token';
 export const USER_KEY = 'user_data';
@@ -52,7 +54,7 @@ export const sessionManager = {
   },
 
   // Logout
-  logout: (router?: any) => {
+  logout: (router?: AppRouterInstance) => {
     sessionManager.clearAuth();
     if (router) {
       // Use Next.js router for client-side navigation

@@ -15,14 +15,31 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  email          String   @unique
-  password       String?  // Null if OAuth
+  id             String     @id @default(uuid())
+  email          String     @unique
+  password       String
   name           String
   surname        String
   dateOfBirth    DateTime
-  phoneNo   String   @unique
-  provider       String   @default("email") // 'email', 'google', 'facebook'
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  phoneNo        String     @unique
+  provider       Provider   @default(EMAIL) // 'EMAIL', 'GOOGLE', 'FACEBOOK'
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+
+model OAuthUser {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  fullName       String
+  provider       Provider  @default(EMAIL) // 'EMAIL', 'GOOGLE', 'FACEBOOK'
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+
+enum Provider {
+  EMAIL
+  FACEBOOK
+  GOOGLE
 }

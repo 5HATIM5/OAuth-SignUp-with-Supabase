@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../../lib/supabase/client';
 import api from '../../../lib/api/auth-api';
 import { TOKEN_KEY, USER_KEY } from '../../../lib/auth/session';
+import { notifications } from '@mantine/notifications';
 
 export default function OAuthCallback() {
   const router = useRouter();
@@ -14,19 +15,21 @@ export default function OAuthCallback() {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session) {
-        alert('OAuth failed');
+        notifications.show({
+          title: 'Error',
+          message: 'OAuth failed',
+          color: 'red',
+        });
         return;
       }
 
       // Send token and user info to your backend
       const { access_token } = session;
       const { user } = session;
-      console.log(user);
       const profile = {
-        email: user.email || `${user.id}@facebook.com`, // Fallback email for Facebook
-        name: user.user_metadata.name || user.user_metadata.full_name || '',
-        phoneNo: user.user_metadata.phone_number || '',
-        provider: user.app_metadata.provider,
+        email: user.email,
+        fullName: user.user_metadata.name || user.user_metadata.full_name || '',
+        provider: user.app_metadata.provider?.toUpperCase(),
       };
 
       try {
@@ -42,7 +45,11 @@ export default function OAuthCallback() {
         router.push('/user-dashboard');
       } catch (error) {
         console.error('OAuth login error:', error);
-        alert('OAuth login failed. Please try again.');
+        notifications.show({
+          title: 'Error',
+          message: 'OAuth login failed. Please try again.',
+          color: 'red',
+        });
         router.push('/');
       }
     };

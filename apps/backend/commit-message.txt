@@ -1,5 +1,7 @@
-feat(auth): add DTO and backend support for OAuth email flow; add NotFound page in frontend
+feat(auth): update schema for oauthuser table; OAuth works for Google and Facebook
 
+- Updated schema: added/modified oauthuser table
+- OAuth login works for Google and Facebook providers
 - Added DTO for OAuth email flow in backend
 - Implemented backend logic for OAuth email login
 - Verified login flow is working perfectly

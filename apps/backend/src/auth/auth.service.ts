@@ -2,8 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { RegisterDto, LoginDto, NewUserDto, AuthResponseDto } from './auth.dto';
+import { RegisterDto, LoginDto, AuthResponseDto, OAuthLoginDto, UserDto } from './auth.dto';
 import { parseDate } from 'src/lib/helpers/helperFunctions';
+import { Provider } from 'generated/prisma';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
         surname: dto.surname,
         dateOfBirth: parseDate(dto.dateOfBirth),
         phoneNo: dto.phoneNo,
-        provider: 'email',
+        provider: Provider.EMAIL,
       }
     });
 
@@ -54,26 +55,29 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async oauthLogin({ email, name, phoneNo, provider }: any) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  async oauthLogin(dto: OAuthLoginDto) {
+    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
   
     if (user) {
       return this.generateAuthResponse(user);
     }
   
-    const newUser = await this.prisma.user.create({
+    const newUser = await this.prisma.oAuthUser.create({
       data: {
-        email,
-        name,
-        surname: '',
-        dateOfBirth: new Date('2000-01-01'), // default
-        password: null,
-        phoneNo,
-        provider,
+        email: dto.email,
+        fullName: dto.fullName,
+        provider: dto.provider as Provider, 
       },
     });
   
-    return this.generateAuthResponse(newUser);
+    return this.generateAuthResponse({
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.fullName.split(' ')[0],
+      surname: newUser.fullName.split(' ')[1],
+      createdAt: newUser.createdAt,
+      updatedAt: newUser.updatedAt,
+    });
   }
   
   private generateToken(userId: string, email: string) {
@@ -84,18 +88,11 @@ export class AuthService {
     };
   }
 
-  private generateAuthResponse(user: NewUserDto): AuthResponseDto {
+  private generateAuthResponse(user: UserDto): AuthResponseDto {
     const token = this.generateToken(user.id, user.email);
     return {
       ...token,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        surname: user.surname,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }
+      user: user
     };
   }
 }
