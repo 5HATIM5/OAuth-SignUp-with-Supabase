@@ -21,12 +21,12 @@ import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
 import { FacebookButton } from '../buttons/facebookButton';
 import { GoogleButton } from '../buttons/googleButton';
-import { authAPI } from '../../lib/api/auth.api.ts';
+import { authAPI } from '../../lib/api/auth.api';
 import { sessionManager } from '../../lib/auth/session';
 import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
 import { getValidationRules } from '../../lib/helpers/validation';
-import { supabase } from '../../lib/db/supabse';
+import { supabase } from '../../lib/db/supabase';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
@@ -138,7 +138,7 @@ export default function SignUpForm(props: PaperProps) {
         px={{ base: 16, sm: 20, md: 0 }}
       >
         <Title ta="center" fw={700} size={25} c="dark.8">
-          Welcome to Referal System
+          Happy To See You !
         </Title>
         <Text c="dimmed" size="md" ta="center" mt={5} mb={20}>
           {type === 'register'

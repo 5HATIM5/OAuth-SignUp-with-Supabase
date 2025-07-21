@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start:dev",
+    "dev": "pnpm dev:frontend & pnpm dev:backend",
+    "prisma:generate": "pnpm --filter backend prisma:generate"
   },
   "keywords": [],
   "author": "",

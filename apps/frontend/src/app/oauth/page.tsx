@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../../lib/db/supabse';
+import { supabase } from '../../../lib/db/supabase';
 import api from '../../../lib/api/auth.api.ts';
 import { TOKEN_KEY, USER_KEY } from '../../../lib/auth/session';
 

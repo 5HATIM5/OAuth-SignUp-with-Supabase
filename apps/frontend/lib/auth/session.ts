@@ -1,4 +1,4 @@
-import { AuthResponse } from '../api/auth.api.ts.js';
+import { AuthResponse } from '../api/auth.api.js';
 
 export const TOKEN_KEY = 'auth_token';
 export const USER_KEY = 'user_data';

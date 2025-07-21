@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import SignUpForm from "../../componenets/auth/SignUpForm";
+import SignUpForm from "../../components/auth/SignUpForm";
 import { sessionManager } from '../../lib/auth/session';
 import { LoadingOverlay } from '@mantine/core';
 
