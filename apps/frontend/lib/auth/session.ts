@@ -1,4 +1,4 @@
-import { AuthResponse } from '../api/auth.api.js';
+import { AuthResponse } from '../api/auth-api.js';
 
 export const TOKEN_KEY = 'auth_token';
 export const USER_KEY = 'user_data';
@@ -8,8 +8,6 @@ export interface User {
   email: string;
   name: string;
   surname: string;
-  nickname: string;
-  role: string;
 }
 
 export const sessionManager = {

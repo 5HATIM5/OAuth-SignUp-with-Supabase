@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import SignUpForm from "../../components/auth/SignUpForm";
+import SignUpForm from "../../components/Auth/SignUpForm";
 import { sessionManager } from '../../lib/auth/session';
 import { LoadingOverlay } from '@mantine/core';
 
@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     // Redirect authenticated users to home page
     if (sessionManager.isAuthenticated()) {
-      router.push('/home');
+      router.push('/user-dashboard');
     }
     setTimeout(() => {
       setLoading(false);

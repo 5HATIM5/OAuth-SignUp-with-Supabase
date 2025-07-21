@@ -12,11 +12,10 @@ const api = axios.create({
 export interface RegisterData {
   name: string;
   surname: string;
-  nickname: string;
   dateOfBirth: string;
   email: string;
   password: string;
-  referralCode?: string;
+  phoneNo: string;
 }
 
 export interface LoginData {
@@ -29,8 +28,6 @@ export interface User {
   email: string;
   name: string;
   surname: string;
-  nickname: string;
-  role: string;
 }
 
 export interface AuthResponse {

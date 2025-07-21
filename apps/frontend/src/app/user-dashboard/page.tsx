@@ -53,7 +53,7 @@ export default function HomePage() {
       <Paper shadow="sm" p="xl" radius="md" bg="white">
         <Stack gap="lg">
           <Group justify="space-between" align="center">
-            <Title order={1}>Welcome to Trendies Referral System</Title>
+            <Title order={1}>Welcome {user.name} {user.surname}</Title>
             <Button color="red" onClick={handleLogout}>
               Logout
             </Button>

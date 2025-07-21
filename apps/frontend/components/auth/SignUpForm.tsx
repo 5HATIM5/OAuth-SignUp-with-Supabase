@@ -19,14 +19,14 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
-import { FacebookButton } from '../buttons/facebookButton';
-import { GoogleButton } from '../buttons/googleButton';
-import { authAPI } from '../../lib/api/auth.api';
+import { FacebookButton } from '../Buttons/FacebookButton';
+import { GoogleButton } from '../Buttons/GoogleButton';
+import { authAPI } from '../../lib/api/auth-api';
 import { sessionManager } from '../../lib/auth/session';
 import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
-import { getValidationRules } from '../../lib/helpers/validation';
-import { supabase } from '../../lib/db/supabase';
+import { getValidationRules } from '../../lib/auth/helpers/validate-sessions';
+import { supabase } from '../../lib/supabase/client';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
@@ -37,12 +37,11 @@ export default function SignUpForm(props: PaperProps) {
     initialValues: {
       name: '',
       surname: '',
-      nickname: '',
       email: '',
       dateOfBirth: '',
       password: '',
       confirmPassword: '',
-      referralCode: '761232',
+      phoneNo: '',
       terms: true,
     },
     validate: getValidationRules(type),
@@ -71,11 +70,10 @@ export default function SignUpForm(props: PaperProps) {
         const response = await authAPI.register({
           name: form.values.name,
           surname: form.values.surname,
-          nickname: '@'+form.values.nickname,
           dateOfBirth: form.values.dateOfBirth,
           email: form.values.email,
           password: form.values.password,
-          referralCode: form.values.referralCode,
+          phoneNo: form.values.phoneNo,
         });
 
         // Save session data
@@ -86,7 +84,7 @@ export default function SignUpForm(props: PaperProps) {
           message: 'Registration successful!',
           color: 'green',
         });
-        router.push('/home');
+        router.push('/user-dashboard');
       } else {
         // Handle login
         const response = await authAPI.login({
@@ -102,34 +100,33 @@ export default function SignUpForm(props: PaperProps) {
           message: 'Login successful!',
           color: 'green',
         });
-        router.push('/home');
+        router.push('/user-dashboard');
       }
-          } catch (error: any) {
-        console.error('Authentication error:', error);
-        const errorMessage = error.response?.data?.message || 'Authentication failed';
-        notifications.show({
-          title: 'Error',
-          message: errorMessage,
-          color: 'red',
-        });
-      } finally {
-        setLoading(false);
-      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Authentication failed';
+      notifications.show({
+        title: 'Error',
+        message: errorMessage,
+        color: 'red',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loginWith = async (provider: 'google' | 'facebook') => {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: 'http://localhost:3000/oauth',
+        redirectTo: 'http://localhost:3000/o-auth',
       },
     });
   };
-  
+
   return (
     <Box pos="relative">
       <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-      
+
       <Container
         size="sm"
         w="100%"
@@ -156,15 +153,13 @@ export default function SignUpForm(props: PaperProps) {
           bg="white"
           {...props}
         >
-          {type === 'login' && (
-            <>
-              <Group grow mb="md" mt="md">
-                <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
-                <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
-              </Group>
-              <Divider label="Or continue with email" labelPosition="center" my="md" />
-            </>
-          )}
+
+          <Group grow mb="md" mt="md">
+            <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
+            <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
+          </Group>
+          {/* Add Group and new buttons for different providers */}
+          <Divider label="Or continue with email" labelPosition="center" my="md" />
 
           <form onSubmit={handleSubmit}>
             <Stack gap="sm">
@@ -172,16 +167,18 @@ export default function SignUpForm(props: PaperProps) {
                 <>
                   <Group grow gap="sm" wrap="wrap">
                     <TextInput
+                      required
                       label="Name"
-                      placeholder="Your name"
+                      placeholder="e.g. John"
                       radius="md"
                       size="sm"
                       style={{ flex: 1, minWidth: 200 }}
                       {...form.getInputProps('name')}
                     />
                     <TextInput
+                      required
                       label="Surname"
-                      placeholder="Your surname"
+                      placeholder="e.g. Doe"
                       radius="md"
                       size="sm"
                       style={{ flex: 1, minWidth: 200 }}
@@ -189,16 +186,9 @@ export default function SignUpForm(props: PaperProps) {
                     />
                   </Group>
 
-                  <TextInput
-                    label="Nickname"
-                    placeholder="Your nickname"
-                    radius="md"
-                    size="sm"
-                    {...form.getInputProps('nickname')}
-                  />
-
                   <Group grow gap="sm" wrap="wrap">
                     <TextInput
+                      required
                       label="Date of Birth"
                       type="date"
                       radius="md"
@@ -207,14 +197,15 @@ export default function SignUpForm(props: PaperProps) {
                       {...form.getInputProps('dateOfBirth')}
                     />
                     <TextInput
-                      label="Referral Code"
-                      placeholder="Referral code"
+                      required
+                      label="Phone Number"
+                      placeholder="e.g. +49 157 777 77 77"
+                      type='tel'
                       radius="md"
                       size="sm"
-                      disabled
-                      value={form.values.referralCode}
+                      value={form.values.phoneNo}
                       style={{ flex: 1, minWidth: 200 }}
-                      {...form.getInputProps('referralCode')}
+                      {...form.getInputProps('phoneNo')}
                     />
                   </Group>
                 </>
@@ -223,7 +214,7 @@ export default function SignUpForm(props: PaperProps) {
               <TextInput
                 required
                 label="Email"
-                placeholder="hello@trendies.com"
+                placeholder="e.g. jhon.doe@gmail.com"
                 radius="md"
                 size="sm"
                 {...form.getInputProps('email')}

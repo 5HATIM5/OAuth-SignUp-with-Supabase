@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { RegisterDto, LoginDto } from './auth.dto';
+import { RegisterDto, LoginDto, NewUserDto, AuthResponseDto } from './auth.dto';
 import { parseDate } from 'src/lib/helpers/helperFunctions';
 
 @Injectable()
@@ -17,9 +17,6 @@ export class AuthService {
     if (existingUser) throw new UnauthorizedException('Email already registered');
 
     const hash = await bcrypt.hash(dto.password, 10);
-    
-    const referralCode = Math.random().toString(36).substring(2, 8);
-
   
     const user = await this.prisma.user.create({
       data: {
@@ -27,17 +24,22 @@ export class AuthService {
         password: hash,
         name: dto.name,
         surname: dto.surname,
-        nickname: dto.nickname,
         dateOfBirth: parseDate(dto.dateOfBirth),
-        referredBy: dto.referralCode || null,
-        referralCode,
-        role: 'seller',
+        phoneNo: dto.phoneNo,
         provider: 'email',
       }
     });
 
-    console.log('User created successfully:', user.id);
-    return this.generateAuthResponse(user);
+     let authResponse: AuthResponseDto;
+     try {
+       authResponse = this.generateAuthResponse(user);
+       if (!authResponse.accessToken) throw new Error('Token generation failed');
+     } catch (err) {
+       // Throwing here will rollback the transaction
+       throw new UnauthorizedException('Registration failed: ' + err.message);
+     }
+ 
+     return authResponse;
   }
 
   async login(dto: LoginDto) {    
@@ -52,7 +54,7 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async oauthLogin({ email, name, nickname, provider }: any) {
+  async oauthLogin({ email, name, phoneNo, provider }: any) {
     const user = await this.prisma.user.findUnique({ where: { email } });
   
     if (user) {
@@ -64,11 +66,9 @@ export class AuthService {
         email,
         name,
         surname: '',
-        nickname,
         dateOfBirth: new Date('2000-01-01'), // default
         password: null,
-        referralCode: Math.random().toString(36).substring(2, 8),
-        role: 'seller',
+        phoneNo,
         provider,
       },
     });
@@ -84,7 +84,7 @@ export class AuthService {
     };
   }
 
-  private generateAuthResponse(user: any) {
+  private generateAuthResponse(user: NewUserDto): AuthResponseDto {
     const token = this.generateToken(user.id, user.email);
     return {
       ...token,
@@ -93,8 +93,8 @@ export class AuthService {
         email: user.email,
         name: user.name,
         surname: user.surname,
-        nickname: user.nickname,
-        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       }
     };
   }
