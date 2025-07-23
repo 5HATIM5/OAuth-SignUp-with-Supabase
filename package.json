@@ -6,7 +6,7 @@
   "scripts": {
     "dev:frontend": "pnpm --filter frontend dev",
     "dev:frontend:install": "pnpm --filter frontend install",
-    "dev:backend": "pnpm --filter backend start:dev",
+    "dev:backend": "pnpm --filter backend start:dev | npx pino-pretty",
     "dev:backend:install": "pnpm --filter backend install",
     "dev": "pnpm dev:frontend & pnpm dev:backend",
     "prisma:generate": "pnpm --filter backend prisma:generate",

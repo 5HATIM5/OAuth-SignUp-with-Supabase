@@ -78,6 +78,8 @@ export default function SignUpForm(props: PaperProps) {
           password: form.values.password,
           phoneNo: form.values.phoneNo,
         });
+        
+        router.push('/user-dashboard');
 
         // Save session data
         sessionManager.setAuth(response, response.user);
@@ -89,7 +91,6 @@ export default function SignUpForm(props: PaperProps) {
           icon: <IconCircleCheckFilled size={20} />,
           position: 'top-center',
         });
-        router.push('/user-dashboard');
       } else {
         // Handle login
         const response = await authAPI.login({

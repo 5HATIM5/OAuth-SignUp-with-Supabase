@@ -1,21 +1,29 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto, AuthResponseDto, OAuthLoginDto, UserDto } from './auth.dto';
 import { parseDate } from 'src/lib/helperFunctions/parseDate';
 import { Provider } from 'generated/prisma';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    @InjectPinoLogger(AuthService.name) private readonly logger: PinoLogger
   ) {}
 
-  async register(dto: RegisterDto) {    
+  async register(dto: RegisterDto) {   
+    this.logger.info({ email: dto.email }, 'Register attempt'); 
+
+    //check if user already exists
     const existingUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
-    if (existingUser) throw new UnauthorizedException('Email already registered');
+    if (existingUser) {
+      this.logger.warn({ email: dto.email }, 'Registration failed: Email already registered');
+      throw new UnauthorizedException('Email already registered');
+    }
 
     const hash = await bcrypt.hash(dto.password, 10);
   
@@ -34,9 +42,12 @@ export class AuthService {
      let authResponse: AuthResponseDto;
      try {
        authResponse = this.generateAuthResponse(user);
-       if (!authResponse.accessToken) throw new Error('Token generation failed');
+       if (!authResponse.accessToken) {
+        this.logger.error('Token generation failed');
+        throw new Error('Token generation failed');
+       }
      } catch (err) {
-       // Throwing here will rollback the transaction
+       this.logger.error('Registration failed: ' + err.message);
        throw new UnauthorizedException('Registration failed: ' + err.message);
      }
  
@@ -44,21 +55,31 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {    
+    this.logger.info({ email: dto.email }, 'Login attempt');
+
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (!user || !user.password) {
+      this.logger.warn({ email: dto.email }, 'Login failed: Invalid credentials');
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const match = await bcrypt.compare(dto.password, user.password);    
-    if (!match) throw new UnauthorizedException('Invalid credentials');
+    if (!match) {
+      this.logger.warn({ email: dto.email }, 'Login failed: Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
+    this.logger.info({ email: dto.email }, 'Login successful');
     return this.generateAuthResponse(user);
   }
 
   async oauthLogin(dto: OAuthLoginDto) {
+    this.logger.info({ email: dto.email }, 'OAuth login attempt');
+
     const user = await this.prisma.oAuthUser.findUnique({ where: { email: dto.email } });
   
     if (user) {
+      this.logger.info({ email: dto.email }, 'OAuth login successful');
       return this.generateAuthResponse({
         id: user.id,
         email: user.email,
