@@ -6,7 +6,7 @@ A modern starter template for building full-stack applications with authenticati
 
 ## 🚀 Tech Stack
 
-- **Frontend:** Next.js, React
+- **Frontend:** Next.js, React, Mantine UI
 - **Backend:** NestJS, Prisma
 - **Auth:** Supabase Auth (OAuth + Email/Password)
 - **ORM:** Prisma
