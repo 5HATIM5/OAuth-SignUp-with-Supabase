@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { sessionManager } from '../auth/session';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -44,6 +45,15 @@ export const authAPI = {
 
   login: async (data: LoginData): Promise<AuthResponse> => {
     const response = await api.post('/auth/login', data);
+    return response.data;
+  },
+
+  test: async (): Promise<string> => {
+    const response = await api.get('/users/test', {
+      headers: {
+        Authorization: `Bearer ${sessionManager.getToken()}`,
+      },
+    });
     return response.data;
   },
 };

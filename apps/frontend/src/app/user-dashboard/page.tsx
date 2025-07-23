@@ -5,6 +5,7 @@ import { Container, Title, Text, Button, Paper, Group, Stack, Avatar, LoadingOve
 import { sessionManager, User } from '../../../lib/auth/session';
 import { notifications } from '@mantine/notifications';
 import { Navbar } from '../../../components/Dashboard/Navbar/Navbar';
+import { authAPI } from '../../../lib/api/auth-api';
 
 export default function HomePage() {
   const router = useRouter();
@@ -22,6 +23,13 @@ export default function HomePage() {
     const userData = sessionManager.getUser();
     setUser(userData);
     setLoading(false);
+
+    const fetchData = async () => {
+      const response = await authAPI.test();
+      console.log(response);
+    };
+    
+    fetchData();
   }, [router]);
 
   if (loading) {
