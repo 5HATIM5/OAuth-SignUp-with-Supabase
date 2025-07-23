@@ -87,6 +87,45 @@ Set the redirect URIs to point to your frontend (e.g., `http://localhost:3000/ap
 
 ---
 
+## 🔑 OAuth Provider Setup
+
+Follow these step-by-step guides to set up each OAuth provider:
+
+### Google
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/apis/credentials) and create a new project (or select an existing one).
+2. Navigate to **APIs & Services > Credentials** and click **Create Credentials > OAuth client ID**.
+3. Choose **Web application**. Set the authorized redirect URI to:
+   - **Copy the callback URL from Supabase** (e.g., `https://<your-supabase-project-ref>.supabase.co/auth/v1/callback`).
+   - Or for local dev: `http://localhost:3000/auth/v1/callback` (if needed).
+4. After creation, copy the **Client ID** and **Client Secret**.
+5. In your Supabase dashboard, go to **Authentication > Providers > Google**. Paste the Client ID and Secret, and enable Google login.
+
+### Facebook
+1. Go to the [Facebook Developers](https://developers.facebook.com/) portal and create a new app.
+2. In your app dashboard, go to **Settings > Basic**. Copy the **App ID** and **App Secret**.
+3. In Supabase, go to **Authentication > Providers > Facebook**. Paste the App ID and App Secret, and enable Facebook login.
+4. Copy the callback URL from Supabase (e.g., `https://<your-supabase-project-ref>.supabase.co/auth/v1/callback`).
+5. In Facebook Developers, navigate to **Use Cases > Facebook Login > Settings**. Under **Valid OAuth Redirect URIs**, paste the callback URL.
+6. Save changes and make sure Facebook Login is enabled.
+
+### GitHub
+1. Go to [GitHub Developer Settings](https://github.com/settings/developers) and click **New OAuth App**.
+2. Set the application name and homepage URL.
+3. Set the **Authorization callback URL** to **the callback URL copied from Supabase** (e.g., `https://<your-supabase-project-ref>.supabase.co/auth/v1/callback`).
+4. After creation, copy the **Client ID** and **Client Secret**.
+5. In Supabase, go to **Authentication > Providers > GitHub**. Paste the Client ID and Secret, and enable GitHub login.
+
+### LinkedIn
+1. Go to [LinkedIn Developers](https://www.linkedin.com/developers/) and create a new app.
+2. In your app dashboard, go to **Auth > OAuth 2.0 settings**.
+3. Set the **Redirect URL** to **the callback URL copied from Supabase** (e.g., `https://<your-supabase-project-ref>.supabase.co/auth/v1/callback`).
+4. Copy the **Client ID** and **Client Secret** from the app settings.
+5. In Supabase, go to **Authentication > Providers > LinkedIn**. Paste the Client ID and Secret, and enable LinkedIn login.
+
+> **Note:** Always use the correct callback/redirect URL as shown in your Supabase Auth provider settings. For local development, you may need to add `http://localhost:3000/auth/v1/callback` as well.
+
+---
+
 ## 🗄️ Prisma & Database Setup
 
 This project uses Prisma as the ORM for the backend. You can manage your database schema and migrations easily.
