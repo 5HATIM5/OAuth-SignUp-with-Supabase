@@ -74,7 +74,7 @@ export default function SignUpForm(props: PaperProps) {
           name: form.values.name,
           surname: form.values.surname,
           dateOfBirth: form.values.dateOfBirth,
-          email: form.values.email,
+          email: form.values.email.trim().toLowerCase(),
           password: form.values.password,
           phoneNo: form.values.phoneNo,
         });

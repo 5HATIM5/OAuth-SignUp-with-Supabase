@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { CustomErrorResponse } from './lib/errorResponse/customErrorResponse';
+import { CustomErrorResponse } from './lib/customResponse/customErrorResponse';
 import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
@@ -22,6 +22,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true, 
       transform: true,
     }),
   );

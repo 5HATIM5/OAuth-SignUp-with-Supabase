@@ -3,9 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto, AuthResponseDto, OAuthLoginDto, UserDto } from './auth.dto';
-import { parseDate } from 'src/lib/helperFunctions/parseDate';
-import { Provider } from 'generated/prisma';
+import { Provider } from '../../generated/prisma';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { parseDate } from '../lib/helperFunctions/parseDate';
 
 @Injectable()
 export class AuthService {
@@ -19,10 +19,23 @@ export class AuthService {
     this.logger.info({ email: dto.email }, 'Register attempt'); 
 
     //check if user already exists
-    const existingUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: dto.email },
+          { phoneNo: dto.phoneNo },
+        ],
+      },
+    });
     if (existingUser) {
-      this.logger.warn({ email: dto.email }, 'Registration failed: Email already registered');
-      throw new UnauthorizedException('Email already registered');
+      if (existingUser.email === dto.email) {
+        this.logger.warn({ email: dto.email }, 'Registration failed: Email already registered');
+        throw new UnauthorizedException('Email already registered');
+      }
+      if (existingUser.phoneNo === dto.phoneNo) {
+        this.logger.warn({ phoneNo: dto.phoneNo }, 'Registration failed: Phone number already registered');
+        throw new UnauthorizedException('Phone number already registered');
+      }
     }
 
     const hash = await bcrypt.hash(dto.password, 10);

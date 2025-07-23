@@ -1,8 +1,9 @@
-import { IsDate, IsEmail, IsEnum, IsNumber, IsObject, IsString, MinLength } from 'class-validator';
+import { IsDate, IsEmail, IsEnum, IsNumber, IsObject, IsString, IsUUID, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class RegisterDto {
-    id: string;
     @IsEmail()
+    @Transform(({ value }) => value.trim().toLowerCase())
     email: string;
     @IsString()
     @MinLength(8)
@@ -18,7 +19,6 @@ export class RegisterDto {
 }
 
 export class OAuthLoginDto {    
-    id: string;
     @IsEmail()
     email: string;
     @IsString()
@@ -36,7 +36,9 @@ export class LoginDto {
 }
  
 export class UserDto {
+    @IsUUID()
     id: string;
+    @IsEmail()
     email: string;
     @IsString()
     name: string;
@@ -44,6 +46,7 @@ export class UserDto {
     surname: string;
     @IsDate()
     createdAt: Date;
+    @IsDate()
     updatedAt: Date;
 }
 

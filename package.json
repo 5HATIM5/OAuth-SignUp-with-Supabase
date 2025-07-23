@@ -10,8 +10,8 @@
     "dev:backend:install": "pnpm --filter backend install",
     "dev": "pnpm dev:frontend & pnpm dev:backend",
     "prisma:generate": "pnpm --filter backend prisma:generate",
-    "prisma:push": "pnpm --filter backend prisma:push"
-
+    "prisma:push": "pnpm --filter backend prisma:push",
+    "test:backend": "pnpm --filter backend test:e2e"
   },
   "keywords": [],
   "author": "",
