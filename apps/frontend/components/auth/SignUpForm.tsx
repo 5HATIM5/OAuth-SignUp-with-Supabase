@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import {
   Anchor,
-  Button,
   Divider,
   Group,
   Paper,
@@ -16,6 +15,7 @@ import {
   rem,
   LoadingOverlay,
   Box,
+  Button,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
@@ -27,6 +27,9 @@ import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
 import { getValidationRules } from '../../lib/auth/helpers/validate-sessions';
 import { supabase } from '../../lib/supabase/client';
+import { IconCircleCheckFilled, IconCircleX } from '@tabler/icons-react';
+import { GithubButton } from '../Buttons/GithubButton';
+import { LinkedInButton } from '../Buttons/LinkedInButton';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
@@ -83,6 +86,8 @@ export default function SignUpForm(props: PaperProps) {
           title: 'Success',
           message: 'Registration successful!',
           color: 'green',
+          icon: <IconCircleCheckFilled size={20} />,
+          position: 'top-center',
         });
         router.push('/user-dashboard');
       } else {
@@ -99,7 +104,10 @@ export default function SignUpForm(props: PaperProps) {
           title: 'Success',
           message: 'Login successful!',
           color: 'green',
+          icon: <IconCircleCheckFilled size={20} />,
+          position: 'top-center',
         });
+
         router.push('/user-dashboard');
       }
     } catch (error: any) {
@@ -108,13 +116,15 @@ export default function SignUpForm(props: PaperProps) {
         title: 'Error',
         message: errorMessage,
         color: 'red',
+        icon: <IconCircleX size={20} />,
+        position: 'top-center',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const loginWith = async (provider: 'google' | 'facebook') => {
+  const loginWith = async (provider: 'google' | 'facebook' | 'github' | 'linkedin') => {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
@@ -154,12 +164,24 @@ export default function SignUpForm(props: PaperProps) {
           {...props}
         >
 
-          <Group grow mb="md" mt="md">
-            <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
-            <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
-          </Group>
-          {/* Add Group and new buttons for different providers */}
-          <Divider label="Or continue with email" labelPosition="center" my="md" />
+          {
+            type === 'login' && (
+              <>
+                <Group grow mb="md" mt="md">
+                  <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
+                  <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
+                </Group>
+                <Group grow mb="md" mt="md">
+                  <GithubButton radius="xl" onClick={() => loginWith('github')}>Github</GithubButton>
+                  <LinkedInButton radius="xl" onClick={() => loginWith('linkedin')}>LinkedIn</LinkedInButton>
+                </Group>
+
+                <Divider label="Or continue with email" labelPosition="center" my="md" />
+
+              </>
+            )
+          }
+
 
           <form onSubmit={handleSubmit}>
             <Stack gap="sm">

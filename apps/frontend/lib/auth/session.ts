@@ -55,7 +55,6 @@ export const sessionManager = {
 
   // Logout
   logout: (router?: AppRouterInstance) => {
-    sessionManager.clearAuth();
     if (router) {
       // Use Next.js router for client-side navigation
       router.push('/');
@@ -65,5 +64,6 @@ export const sessionManager = {
         window.location.href = '/';
       }
     }
+    sessionManager.clearAuth();
   },
 }; 

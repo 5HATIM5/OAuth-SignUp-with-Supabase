@@ -6,6 +6,8 @@ import { supabase } from '../../../lib/supabase/client';
 import api from '../../../lib/api/auth-api';
 import { TOKEN_KEY, USER_KEY } from '../../../lib/auth/session';
 import { notifications } from '@mantine/notifications';
+import { IconCircleCheckFilled, IconCircleX } from '@tabler/icons-react';
+import { LoadingOverlay } from '@mantine/core';
 
 export default function OAuthCallback() {
   const router = useRouter();
@@ -19,6 +21,8 @@ export default function OAuthCallback() {
           title: 'Error',
           message: 'OAuth failed',
           color: 'red',
+          icon: <IconCircleX size={20} />,
+          position: 'top-center',
         });
         return;
       }
@@ -42,13 +46,23 @@ export default function OAuthCallback() {
         // Store custom backend JWT (if returned)
         localStorage.setItem(TOKEN_KEY, res.data.accessToken);
         localStorage.setItem(USER_KEY, JSON.stringify(res.data.user))
+
+        notifications.show({
+          title: 'Success',
+          message: profile.provider + ' login successful!',
+          color: 'green',
+          icon: <IconCircleCheckFilled size={20} />,
+          position: 'top-center',
+        });
+        
         router.push('/user-dashboard');
       } catch (error) {
-        console.error('OAuth login error:', error);
         notifications.show({
           title: 'Error',
           message: 'OAuth login failed. Please try again.',
           color: 'red',
+          icon: <IconCircleX size={20} />,
+          position: 'top-center', 
         });
         router.push('/');
       }
@@ -57,5 +71,5 @@ export default function OAuthCallback() {
     syncUser();
   }, []);
 
-  return <p>Logging in...</p>;
+  return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />;
 }

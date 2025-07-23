@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Container, Title, Text, Button, Paper, Group, Stack, Avatar, LoadingOverlay } from '@mantine/core';
 import { sessionManager, User } from '../../../lib/auth/session';
 import { notifications } from '@mantine/notifications';
+import { Navbar } from '../../../components/Dashboard/Navbar/Navbar';
 
 export default function HomePage() {
   const router = useRouter();
@@ -23,17 +24,6 @@ export default function HomePage() {
     setLoading(false);
   }, [router]);
 
-  const handleLogout = () => {
-
-    notifications.show({
-      title: 'Logout',
-      message: 'You have been logged out',
-      color: 'red',
-    });
-    
-    sessionManager.logout(router);
-  };
-
   if (loading) {
     return (
       <LoadingOverlay visible={loading} />
@@ -49,17 +39,8 @@ export default function HomePage() {
   }
 
   return (
-    <Container size="md" py={50}>
-      <Paper shadow="sm" p="xl" radius="md" bg="white">
-        <Stack gap="lg">
-          <Group justify="space-between" align="center">
-            <Title order={1}>Welcome {user.name} {user.surname}</Title>
-            <Button color="red" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Group>
-        </Stack>
-      </Paper>
-    </Container>
+    <>
+      <Navbar />
+    </>
   );
 } 

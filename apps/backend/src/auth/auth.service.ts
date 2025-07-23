@@ -56,10 +56,17 @@ export class AuthService {
   }
 
   async oauthLogin(dto: OAuthLoginDto) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const user = await this.prisma.oAuthUser.findUnique({ where: { email: dto.email } });
   
     if (user) {
-      return this.generateAuthResponse(user);
+      return this.generateAuthResponse({
+        id: user.id,
+        email: user.email,
+        name: user.fullName.split(' ')[0],
+        surname: user.fullName.split(' ')[1],
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      });
     }
   
     const newUser = await this.prisma.oAuthUser.create({
