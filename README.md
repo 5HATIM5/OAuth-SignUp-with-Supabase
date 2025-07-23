@@ -6,11 +6,18 @@ A modern starter template for building full-stack applications with authenticati
 
 ## 🚀 Tech Stack
 
-- **Frontend:** Next.js, React, Mantine UI
-- **Backend:** NestJS, Prisma
+- **Frontend:**
+  - Next.js: 15.4.2
+  - React: 19.1.0
+  - Mantine UI: 8.1.3
+  - @supabase/supabase-js: 2.52.0
+- **Backend:**
+  - NestJS: 11.0.1
+  - Prisma: 6.12.0
+  - @supabase/supabase-js: 2.52.0
 - **Auth:** Supabase Auth (OAuth + Email/Password)
-- **ORM:** Prisma
-- **Package Manager:** pnpm (monorepo)
+- **ORM:** Prisma 6.12.0
+- **Package Manager:** pnpm 10.11.0 (monorepo)
 
 ---
 
