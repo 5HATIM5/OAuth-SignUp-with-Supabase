@@ -49,7 +49,6 @@ You need to set up environment variables for both frontend and backend. Create `
 #### Example: `apps/backend/.env`
 ```
 DATABASE_URL=your_postgres_connection_string
-SUPABASE_URL=your_supabase_url
 JWT_SECRET=your_jwt_secret
 ```
 
@@ -154,18 +153,18 @@ pnpm install
 
 ### 2. Run Backend
 ```bash
-pnpm --filter backend run start:dev
+pnpm dev:backend
 ```
 
 ### 3. Run Frontend
 ```bash
-pnpm --filter frontend run dev
+pnpm dev:frontend
 ```
 
 Or, in separate terminals, you can run both at once from the root:
 ```bash
-pnpm --filter backend run start:dev
-pnpm --filter frontend run dev
+pnpm dev:frontend
+pnpm dev:backend
 ```
 
 ---
