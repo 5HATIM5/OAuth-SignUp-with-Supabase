@@ -129,15 +129,15 @@ You can find this in your Supabase project under **Settings > Database**.
 ### 2. Generate Prisma Client
 From the root of the monorepo:
 ```bash
-pnpm --filter backend prisma generate
+pnpm prisma:generate
 ```
 
 ### 3. Create and Push Migrations
 To create a new migration and push it to your Supabase database:
 ```bash
 pnpm --filter backend prisma migrate dev --name init
-# or to just push existing schema (no migration prompt):
-pnpm --filter backend prisma db push
+# or to push existing schema (no migration prompt):
+pnpm prisma:push
 ```
 
 ---
