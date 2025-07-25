@@ -1,4 +1,3 @@
- // Define validation rules based on form type
  export const getValidationRules = (type: string) => {
     const baseRules = {
       email: (val: string) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),

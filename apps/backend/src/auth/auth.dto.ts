@@ -1,5 +1,5 @@
-import { IsDate, IsEmail, IsEnum, IsNumber, IsObject, IsString, IsUUID, MinLength } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsDate, IsEmail, IsEnum, IsNumber, IsObject, IsString, IsUUID, MinLength } from 'class-validator';
 
 export class RegisterDto {
     @IsEmail()

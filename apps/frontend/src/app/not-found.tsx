@@ -1,12 +1,13 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { Button, Container, Group, Text, Title } from '@mantine/core';
-import { Illustration } from '../../components/NotFound/Illustration';
-import classes from '../../components/notFound/notFound.module.css';
-import  { useRouter } from 'next/navigation';
+
+import { Illustration } from '@components/NotFound/Illustration';
+import classes from '@components/notFound/notFound.module.css';
 
 export default function NotFound() {
   const router = useRouter();
-  
+
   return (
     <Container className={classes.root}>
       <div className={classes.inner}>

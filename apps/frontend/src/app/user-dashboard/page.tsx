@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Container, Title, Text, Button, Paper, Group, Stack, Avatar, LoadingOverlay } from '@mantine/core';
-import { sessionManager, User } from '../../../lib/auth/session';
-import { notifications } from '@mantine/notifications';
-import { Navbar } from '../../../components/Dashboard/Navbar/Navbar';
-import { authAPI } from '../../../lib/api/auth-api';
+import { Container, Text, LoadingOverlay } from '@mantine/core';
+import { sessionManager, User } from '@lib/auth/session';
+
+import { Navbar } from '@components/Dashboard/Navbar/Navbar';
+import { authAPI } from '@lib/api/auth-api';
 
 export default function HomePage() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function HomePage() {
       const response = await authAPI.test();
       console.log(response);
     };
-    
+
     fetchData();
   }, [router]);
 

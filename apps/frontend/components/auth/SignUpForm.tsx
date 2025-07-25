@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import {
   Anchor,
   Divider,
@@ -12,24 +14,21 @@ import {
   TextInput,
   Container,
   Title,
-  rem,
   LoadingOverlay,
   Box,
   Button,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
-import { FacebookButton } from '../Buttons/FacebookButton';
-import { GoogleButton } from '../Buttons/GoogleButton';
-import { authAPI } from '../../lib/api/auth-api';
-import { sessionManager } from '../../lib/auth/session';
-import { useRouter } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
-import { getValidationRules } from '../../lib/auth/helpers/validate-sessions';
-import { supabase } from '../../lib/supabase/client';
 import { IconCircleCheckFilled, IconCircleX } from '@tabler/icons-react';
-import { GithubButton } from '../Buttons/GithubButton';
-import { LinkedInButton } from '../Buttons/LinkedInButton';
+
+import { FacebookButton } from '@components/Buttons/FacebookButton';
+import { GoogleButton } from '@components/Buttons/GoogleButton';
+import { supabase } from '@lib/supabase/client';
+import { getValidationRules } from '@lib/auth/helpers/validate-sessions';
+import { authAPI } from '@lib/api/auth-api';
+import { sessionManager } from '@lib/auth/session';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
@@ -173,10 +172,10 @@ export default function SignUpForm(props: PaperProps) {
                   <GoogleButton radius="xl" onClick={() => loginWith('google')}>Google</GoogleButton>
                   <FacebookButton radius="xl" onClick={() => loginWith('facebook')}>Facebook</FacebookButton>
                 </Group>
-                <Group grow mb="md" mt="md">
+                {/* <Group grow mb="md" mt="md">
                   <GithubButton radius="xl" onClick={() => loginWith('github')}>Github</GithubButton>
                   <LinkedInButton radius="xl" onClick={() => loginWith('linkedin')}>LinkedIn</LinkedInButton>
-                </Group>
+                </Group> */}
 
                 <Divider label="Or continue with email" labelPosition="center" my="md" />
 

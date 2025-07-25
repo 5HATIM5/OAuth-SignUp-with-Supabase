@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   IconCalendarStats,
   IconCircleX,
@@ -12,11 +13,11 @@ import {
   IconSwitchHorizontal,
   IconUser,
 } from '@tabler/icons-react';
-import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
-import classes from './Navbar.module.css';
-import { sessionManager } from '../../../lib/auth/session';
 import { notifications } from '@mantine/notifications';
-import { useRouter } from 'next/navigation';
+import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
+
+import classes from './Navbar.module.css';
+import { sessionManager } from '@lib/auth/session';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;

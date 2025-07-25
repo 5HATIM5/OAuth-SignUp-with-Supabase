@@ -1,11 +1,12 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { RegisterDto, LoginDto, AuthResponseDto, OAuthLoginDto, UserDto } from './auth.dto';
-import { Provider } from '../../generated/prisma';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
-import { parseDate } from '../lib/helperFunctions/parseDate';
+  import { JwtService } from '@nestjs/jwt';
+  import * as bcrypt from 'bcrypt';
+
+import { Provider } from '../../generated/prisma';
+import { PrismaService } from '@prisma/prisma.service';
+import { parseDate } from '@lib/helperFunctions/parseDate';
+import { RegisterDto, LoginDto, AuthResponseDto, OAuthLoginDto, UserDto } from '@auth/auth.dto';
 
 @Injectable()
 export class AuthService {
