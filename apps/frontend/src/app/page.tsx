@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingOverlay } from '@mantine/core';
 
-import SignUpForm from "@components/Auth/SignUpForm";
-import { sessionManager } from '@lib/auth/session';
+import SignUpForm from "../../components/Auth/SignUpForm";
+import { sessionManager } from '../../lib/auth/session';
 
 
 export default function Home() {

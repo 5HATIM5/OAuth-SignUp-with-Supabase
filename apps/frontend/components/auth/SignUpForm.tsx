@@ -23,12 +23,12 @@ import { upperFirst, useToggle } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconCircleCheckFilled, IconCircleX } from '@tabler/icons-react';
 
-import { FacebookButton } from '@components/Buttons/FacebookButton';
-import { GoogleButton } from '@components/Buttons/GoogleButton';
-import { supabase } from '@lib/supabase/client';
-import { getValidationRules } from '@lib/auth/helpers/validate-sessions';
-import { authAPI } from '@lib/api/auth-api';
-import { sessionManager } from '@lib/auth/session';
+import { FacebookButton } from '../Buttons/FacebookButton';
+import { GoogleButton } from '../Buttons/GoogleButton';
+import { supabase } from '../../lib/supabase/client';
+import { getValidationRules } from '../../lib/auth/helpers/validate-sessions';
+import { authAPI } from '../../lib/api/auth-api';
+import { sessionManager } from '../../lib/auth/session';
 
 export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);

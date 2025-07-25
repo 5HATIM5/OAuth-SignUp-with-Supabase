@@ -1,6 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime.js";
 
-import { AuthResponse } from "@lib/api/auth-api.js";
+import { AuthResponse } from "../../lib/api/auth-api.js";
 
 export const TOKEN_KEY = "auth_token";
 export const USER_KEY = "user_data";

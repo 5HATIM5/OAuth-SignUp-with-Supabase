@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Text, LoadingOverlay } from '@mantine/core';
-import { sessionManager, User } from '@lib/auth/session';
 
-import { Navbar } from '@components/Dashboard/Navbar/Navbar';
-import { authAPI } from '@lib/api/auth-api';
+import { Navbar } from '../../../components/Dashboard/Navbar/Navbar';
+import { authAPI } from '../../../lib/api/auth-api';
+import { sessionManager, User } from '../../../lib/auth/session';
 
 export default function HomePage() {
   const router = useRouter();

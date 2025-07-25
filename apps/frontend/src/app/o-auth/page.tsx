@@ -5,9 +5,9 @@ import { notifications } from '@mantine/notifications';
 import { IconCircleCheckFilled, IconCircleX } from '@tabler/icons-react';
 import { LoadingOverlay } from '@mantine/core';
 
-import api from '@lib/api/auth-api';
-import { supabase } from '@lib/supabase/client';
-import { TOKEN_KEY, USER_KEY } from '@lib/auth/session';
+import api from '../../../lib/api/auth-api';
+import { supabase } from '../../../lib/supabase/client';
+import { TOKEN_KEY, USER_KEY } from '../../../lib/auth/session';
 
 export default function OAuthCallback() {
   const router = useRouter();
