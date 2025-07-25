@@ -15,7 +15,15 @@
         ...baseRules,
         name: (val: string) => (val.length < 1 ? 'Name is required' : null),
         surname: (val: string) => (val.length < 1 ? 'Surname is required' : null),
-        dateOfBirth: (val: string) => (val.length < 1 ? 'Date of birth is required' : null),
+        dateOfBirth: (val: string) => {
+          const date = new Date(val);
+          const today = new Date();
+          const age = today.getFullYear() - date.getFullYear();
+          if (age < 18) {
+            return 'You must be at least 18 years old';
+          }
+          return null;
+        },
         password: (val: string) => {
           if (val.length < 8) {
             return 'Password must be at least 8 characters';

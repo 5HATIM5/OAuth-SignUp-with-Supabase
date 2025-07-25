@@ -214,6 +214,7 @@ export default function SignUpForm(props: PaperProps) {
                       required
                       label="Date of Birth"
                       type="date"
+                      max={new Date().toISOString().split('T')[0]}
                       radius="md"
                       size="sm"
                       style={{ flex: 1, minWidth: 200 }}
