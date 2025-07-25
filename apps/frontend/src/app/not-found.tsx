@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { Button, Container, Group, Text, Title } from '@mantine/core';
 
-import { Illustration } from '../../components/NotFound/Illustration';
+import { Illustration } from '../components/NotFound/Illustration';
 import classes from '../../components/NotFound/NotFound.module.css';
 
 export default function NotFound() {

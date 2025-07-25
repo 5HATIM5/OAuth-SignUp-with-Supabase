@@ -17,7 +17,7 @@ import { notifications } from '@mantine/notifications';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 
 import classes from './Navbar.module.css';
-import { sessionManager } from '../../../lib/auth/session';
+import { sessionManager } from '../../../../lib/auth/session';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Text, LoadingOverlay } from '@mantine/core';
 
-import { Navbar } from '../../../components/Dashboard/Navbar/Navbar';
+import { Navbar } from '../../components/Dashboard/Navbar/Navbar';
 import { authAPI } from '../../../lib/api/auth-api';
 import { sessionManager, User } from '../../../lib/auth/session';
 
