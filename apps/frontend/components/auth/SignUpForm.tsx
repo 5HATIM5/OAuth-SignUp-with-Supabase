@@ -111,8 +111,7 @@ export default function SignUpForm(props: PaperProps) {
         router.push('/user-dashboard');
       }
     } catch (error: any) {
-      console.log(error);
-      const errorMessage = error.response?.data?.message || 'Authentication failed';
+      const errorMessage = error.response?.data?.error?.message?.message || 'Authentication failed';
       notifications.show({
         title: 'Error',
         message: errorMessage,
