@@ -1,4 +1,4 @@
-# OAuth SignUp Starter with Supabase
+# OAuth + Email SignUp with Supabase Starter Package
 
 A modern starter template for building full-stack applications with authentication (email/password & OAuth: Google, Facebook, GitHub, LinkedIn) using Supabase. Use this as a foundation to quickly launch your next project!
 
