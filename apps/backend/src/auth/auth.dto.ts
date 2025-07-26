@@ -25,6 +25,8 @@ export class OAuthLoginDto {
     fullName: string;
     @IsEnum(['FACEBOOK', 'GOOGLE', 'GITHUB', 'LINKEDIN'])
     provider: string;
+    @IsString()
+    token: string;
 }
 
 export class LoginDto {
