@@ -16,7 +16,7 @@ async function bootstrap() {
 
   //cors
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://o-auth-sign-up-with-supabase.vercel.app/'],
     credentials: true,
   });
 
