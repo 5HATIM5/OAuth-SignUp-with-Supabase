@@ -128,7 +128,7 @@ export default function SignUpForm(props: PaperProps) {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: process.env.NODE_ENV === 'production' ? 'https://o-auth-sign-up-with-supabase.vercel.app/o-auth' : 'http://localhost:3000/o-auth',
+        redirectTo: 'https://o-auth-sign-up-with-supabase.vercel.app/o-auth',
       },
     });
   };
