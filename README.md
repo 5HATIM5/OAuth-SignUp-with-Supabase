@@ -2,6 +2,10 @@
 
 A modern starter template for building full-stack applications with authentication (email/password & OAuth: Google, Facebook, GitHub, LinkedIn) using Supabase. Use this as a foundation to quickly launch your next project!
 
+## 🌐 Live Demo
+
+Check out the live project: **[https://o-auth-sign-up-with-supabase.vercel.app/](https://o-auth-sign-up-with-supabase.vercel.app/)**
+
 ---
 
 ## 🚀 Tech Stack
