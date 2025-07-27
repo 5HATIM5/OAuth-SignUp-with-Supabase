@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sessionManager } from '../auth/session';
+import { hashPassword } from '../auth/helpers/password-utils';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -39,12 +40,26 @@ export interface AuthResponse {
 
 export const authAPI = {
   register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await api.post('/auth/register', data);
+    // Hash password before sending to backend
+    const hashedPassword = hashPassword(data.password);
+    const secureData = {
+      ...data,
+      password: hashedPassword,
+    };
+    
+    const response = await api.post('/auth/register', secureData);
     return response.data;
   },
 
   login: async (data: LoginData): Promise<AuthResponse> => {
-    const response = await api.post('/auth/login', data);
+    // Hash password before sending to backend
+    const hashedPassword = hashPassword(data.password);
+    const secureData = {
+      ...data,
+      password: hashedPassword,
+    };
+    
+    const response = await api.post('/auth/login', secureData);
     return response.data;
   },
 
@@ -58,4 +73,4 @@ export const authAPI = {
   },
 };
 
-export default api; 
+export default api;
