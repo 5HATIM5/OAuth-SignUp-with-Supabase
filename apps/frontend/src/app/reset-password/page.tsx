@@ -1,10 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   Anchor,
   Paper,
+  PaperProps,
   PasswordInput,
   Stack,
   Text,
@@ -23,10 +24,10 @@ import { IconCircleCheckFilled, IconCircleX, IconAlertCircle } from '@tabler/ico
 import { authAPI } from '../../../lib/api/auth-api';
 import { getValidationRules } from '../../../lib/auth/helpers/validate-sessions';
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [tokenValid, setTokenValid] = useState<boolean | null>(null);
   const [token, setToken] = useState<string>('');
 
@@ -228,5 +229,26 @@ export default function ResetPasswordPage() {
         </Paper>
       </Container>
     </Box>
+  );
+}
+
+export default function ResetPasswordPage(props: PaperProps) {
+  return (
+    <Suspense fallback={
+      <Box
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Container size="sm" w="100%" maw={500} px={{ base: 16, sm: 20, md: 0 }}>
+          <Text ta="center" size="lg">Loading...</Text>
+        </Container>
+      </Box>
+    }>
+      <ResetPasswordContent/>
+    </Suspense>
   );
 }
