@@ -43,5 +43,24 @@
       };
     }
 
-    return baseRules;
+    if (type === 'reset-password') {
+      return {
+        newPassword: (val: string) => {
+          if (val.length < 8) {
+            return 'Password must be at least 8 characters';
+          }
+          if (!/[A-Z]/.test(val)) {
+            return 'Password must contain at least one uppercase letter';
+          }
+          if (!/[0-9]/.test(val)) {
+            return 'Password must contain at least one number';
+          }
+          if (!/[!@#$%^&*]/.test(val)) {
+            return 'Password must contain at least one special character';
+          }
+          return null;
+        },
+        confirmPassword: (val: string, values: any) => val !== values.newPassword ? 'Passwords do not match' : null,
+      };
+    }
   };

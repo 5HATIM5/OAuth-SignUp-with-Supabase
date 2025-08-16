@@ -25,6 +25,15 @@ export interface LoginData {
   password: string;
 }
 
+export interface ForgotPasswordData {
+  email: string;
+}
+
+export interface ResetPasswordData {
+  token: string;
+  newPassword: string;
+}
+
 export interface User {
   id: string;
   email: string;
@@ -60,6 +69,23 @@ export const authAPI = {
     };
     
     const response = await api.post('/auth/login', secureData);
+    return response.data;
+  },
+
+  forgotPassword: async (data: ForgotPasswordData): Promise<{ message: string }> => {
+    const response = await api.post('/auth/forgot-password', data);
+    return response.data;
+  },
+
+  resetPassword: async (data: ResetPasswordData): Promise<{ message: string }> => {
+    // Hash password before sending to backend
+    const hashedPassword = hashPassword(data.newPassword);
+    const secureData = {
+      ...data,
+      newPassword: hashedPassword,
+    };
+    
+    const response = await api.post('/auth/reset-password', secureData);
     return response.data;
   },
 

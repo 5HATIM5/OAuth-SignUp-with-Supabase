@@ -17,6 +17,7 @@ import {
   LoadingOverlay,
   Box,
   Button,
+  Modal,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { upperFirst, useToggle } from '@mantine/hooks';
@@ -34,6 +35,8 @@ export default function SignUpForm(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -48,6 +51,52 @@ export default function SignUpForm(props: PaperProps) {
     },
     validate: getValidationRules(type),
   });
+
+  const forgotPasswordForm = useForm({
+    initialValues: {
+      email: '',
+    },
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+    },
+  });
+
+  const handleForgotPassword = async () => {
+    const validation = forgotPasswordForm.validate();
+    if (validation.hasErrors) {
+      return;
+    }
+
+    setForgotPasswordLoading(true);
+
+    try {
+      await authAPI.forgotPassword({
+        email: forgotPasswordForm.values.email.trim().toLowerCase(),
+      });
+
+      notifications.show({
+        title: 'Success',
+        message: 'Password reset link sent to your email!',
+        color: 'green',
+        icon: <IconCircleCheckFilled size={20} />,
+        position: 'top-center',
+      });
+
+      setForgotPasswordModal(false);
+      forgotPasswordForm.reset();
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.error?.message?.message || 'Failed to send reset email';
+      notifications.show({
+        title: 'Error',
+        message: errorMessage,
+        color: 'red',
+        icon: <IconCircleX size={20} />,
+        position: 'top-center',
+      });
+    } finally {
+      setForgotPasswordLoading(false);
+    }
+  };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
@@ -252,6 +301,20 @@ export default function SignUpForm(props: PaperProps) {
                 {...form.getInputProps('password')}
               />
 
+              {type === 'login' && (
+                <Anchor
+                  component="button"
+                  type="button"
+                  c="dimmed"
+                  onClick={() => setForgotPasswordModal(true)}
+                  size="xs"
+                  ta="right"
+                  style={{ alignSelf: 'flex-end' }}
+                >
+                  Forgot password?
+                </Anchor>
+              )}
+
               {type === 'register' && (
                 <PasswordInput
                   required
@@ -297,7 +360,47 @@ export default function SignUpForm(props: PaperProps) {
           </form>
         </Paper>
       </Container>
-    </Box>
 
+      {/* Forgot Password Modal */}
+      <Modal
+        opened={forgotPasswordModal}
+        onClose={() => setForgotPasswordModal(false)}
+        title="Reset Password"
+        centered
+        size="sm"
+      >
+        <Stack gap="md">
+          <Text size="sm" c="dimmed">
+            Enter your email address and we'll send you a link to reset your password.
+          </Text>
+          
+          <TextInput
+            required
+            label="Email"
+            placeholder="Enter your email"
+            radius="md"
+            size="sm"
+            {...forgotPasswordForm.getInputProps('email')}
+          />
+
+          <Group justify="flex-end" gap="sm">
+            <Button
+              variant="outline"
+              onClick={() => setForgotPasswordModal(false)}
+              size="sm"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleForgotPassword}
+              loading={forgotPasswordLoading}
+              size="sm"
+            >
+              Send Reset Link
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+    </Box>
   );
 }
