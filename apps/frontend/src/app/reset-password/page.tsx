@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Anchor,
   Paper,
-  PaperProps,
   PasswordInput,
   Stack,
   Text,
@@ -24,10 +23,10 @@ import { IconCircleCheckFilled, IconCircleX, IconAlertCircle } from '@tabler/ico
 import { authAPI } from '../../../lib/api/auth-api';
 import { getValidationRules } from '../../../lib/auth/helpers/validate-sessions';
 
-export default function ResetPasswordPage(props: PaperProps) {
+export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [tokenValid, setTokenValid] = useState<boolean | null>(null);
   const [token, setToken] = useState<string>('');
 
@@ -177,7 +176,6 @@ export default function ResetPasswordPage(props: PaperProps) {
           radius="md"
           style={{ width: '100%', minWidth: '400px' }}
           bg="white"
-          {...props}
         >
           <form onSubmit={(e) => { e.preventDefault(); handleResetPassword(); }}>
             <Stack gap="sm">

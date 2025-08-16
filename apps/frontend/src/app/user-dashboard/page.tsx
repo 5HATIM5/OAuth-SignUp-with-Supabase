@@ -10,7 +10,7 @@ import { sessionManager, User } from '../../../lib/auth/session';
 export default function HomePage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Check if user is authenticated
