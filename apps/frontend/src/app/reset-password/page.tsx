@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Anchor,
   Paper,
-  PaperProps,
   PasswordInput,
   Stack,
   Text,
@@ -232,7 +231,7 @@ function ResetPasswordContent() {
   );
 }
 
-export default function ResetPasswordPage(props: PaperProps) {
+export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
       <Box
@@ -248,7 +247,7 @@ export default function ResetPasswordPage(props: PaperProps) {
         </Container>
       </Box>
     }>
-      <ResetPasswordContent/>
+      <ResetPasswordContent />
     </Suspense>
   );
 }
